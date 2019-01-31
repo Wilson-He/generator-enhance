@@ -15,7 +15,6 @@ package per.baomidou.mybatisplus.generator.engine;
 
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import per.baomidou.mybatisplus.generator.AbstractInjectionConfig;
@@ -69,6 +68,17 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
+            Map<String, String> packageInfo = configBuilder.getPackageInfo();
+            final boolean generateEntity = packageInfo.get(ConstVal.ENTITY) != null;
+            final boolean generateConstant = packageInfo.get(ConstVal.CONSTANT) != null;
+            final boolean generateDAO = packageInfo.get(ConstVal.MAPPER) != null;
+            final boolean generateMapper = packageInfo.get(ConstVal.XML) != null;
+            final boolean generateService = packageInfo.get(ConstVal.SERIVCE) != null;
+            final boolean generateServiceImpl = packageInfo.get(ConstVal.SERVICEIMPL) != null;
+            final boolean generateController = packageInfo.get(ConstVal.CONTROLLER) != null;
+            final boolean generateControllerImpl = packageInfo.get(ConstVal.CONTROLLERIMPL) != null;
+            final boolean generateDTO = packageInfo.get(ConstVal.DTO) != null;
+            final boolean generateVO = packageInfo.get(ConstVal.VO) != null;
             List<TableInfo> tableInfoList = this.getConfigBuilder().getTableInfoList();
             for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = this.getObjectMap(tableInfo);
@@ -94,58 +104,58 @@ public abstract class AbstractTemplateEngine {
                 boolean generateCondition;
                 // Entity.java
                 String entityName = tableInfo.getEntityName();
-                generateCondition = null != tableInfo.getMapperName() && null != pathInfo.get(ConstVal.ENTITY_PATH);
+                generateCondition = generateEntity && null != tableInfo.getMapperName() && null != pathInfo.get(ConstVal.ENTITY_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.ENTITY_PATH),
                         "%s", template.getEntity(this.getConfigBuilder().getGlobalConfig().isKotlin()));
                 // EntityConstant.java
-                generateCondition = tableInfo.hasConstantField() && null != pathInfo.get(ConstVal.CONSTANT_PATH);
+                generateCondition = generateConstant && tableInfo.hasConstantField() && null != pathInfo.get(ConstVal.CONSTANT_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.CONSTANT_PATH),
                         tableInfo.getConstantName(), template.getConstant());
                 // EntityMapper.java
-                generateCondition = null != tableInfo.getMapperName() && null != pathInfo.get(ConstVal.MAPPER_PATH);
+                generateCondition = generateDAO && null != tableInfo.getMapperName() && null != pathInfo.get(ConstVal.MAPPER_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.MAPPER_PATH),
                         tableInfo.getMapperName(), template.getMapper());
                 // EntityMapper.xml
-                generateCondition = null != tableInfo.getXmlName() && null != pathInfo.get(ConstVal.XML_PATH);
+                generateCondition = generateMapper && null != tableInfo.getXmlName() && null != pathInfo.get(ConstVal.XML_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.XML_PATH),
                         tableInfo.getXmlName(), template.getXml());
                 // EntityService.java
-                generateCondition = excludeFlag && null != tableInfo.getServiceName()
+                generateCondition = generateService && excludeFlag && null != tableInfo.getServiceName()
                         && null != pathInfo.get(ConstVal.SERIVCE_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.SERIVCE_PATH),
                         tableInfo.getServiceName(), template.getService());
                 // EntityServiceImpl.java
-                generateCondition = excludeFlag && null != tableInfo.getServiceImplName()
+                generateCondition = generateService && generateServiceImpl && excludeFlag && null != tableInfo.getServiceImplName()
                         && null != pathInfo.get(ConstVal.SERVICEIMPL_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.SERVICEIMPL_PATH),
                         tableInfo.getServiceImplName(), template.getServiceImpl());
                 // EntityController.java
-                generateCondition = excludeFlag && null != tableInfo.getControllerName()
+                generateCondition = generateController && excludeFlag && null != tableInfo.getControllerName()
                         && null != pathInfo.get(ConstVal.CONTROLLER_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.CONTROLLER_PATH),
                         tableInfo.getControllerName(), template.getController());
                 // EntityControllerImpl.java
-                generateCondition = excludeFlag && null != tableInfo.getControllerImplName()
+                generateCondition = generateControllerImpl && excludeFlag && null != tableInfo.getControllerImplName()
                         && null != pathInfo.get(ConstVal.CONTROLLER_IMPL_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.CONTROLLER_IMPL_PATH),
                         tableInfo.getControllerImplName(), template.getControllerImpl());
                 // GetDTO.java
-                generateCondition = excludeFlag && null != tableInfo.getDtoGetName()
+                generateCondition = generateDTO && excludeFlag && null != tableInfo.getDtoGetName()
                         && null != pathInfo.get(ConstVal.DTO_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.DTO_PATH),
                         tableInfo.getDtoGetName(), template.getDtoGet());
                 // PageDTO.java
-                generateCondition = excludeFlag && null != tableInfo.getDtoPageName()
+                generateCondition = generateDTO && excludeFlag && null != tableInfo.getDtoPageName()
                         && null != pathInfo.get(ConstVal.DTO_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.DTO_PATH),
                         tableInfo.getDtoPageName(), template.getDtoPage());
                 // AddVO.java
-                generateCondition = excludeFlag && null != tableInfo.getVoAddName()
+                generateCondition = generateVO && excludeFlag && null != tableInfo.getVoAddName()
                         && null != pathInfo.get(ConstVal.VO_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.VO_PATH),
                         tableInfo.getVoAddName(), template.getVoGet());
                 // UpdateVO.java
-                generateCondition = excludeFlag && null != tableInfo.getVoUpdateName()
+                generateCondition = generateVO && excludeFlag && null != tableInfo.getVoUpdateName()
                         && null != pathInfo.get(ConstVal.VO_PATH);
                 generateFile(generateCondition, entityName, objectMap, pathInfo.get(ConstVal.VO_PATH),
                         tableInfo.getVoUpdateName(), template.getVoUpdate());

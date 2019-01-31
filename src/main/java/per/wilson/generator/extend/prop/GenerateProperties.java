@@ -1,10 +1,5 @@
 package per.wilson.generator.extend.prop;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +15,11 @@ import per.wilson.generator.constant.TemplateType;
 import per.wilson.generator.extend.config.CustomDataSourceConfig;
 import per.wilson.generator.utils.IfUtils;
 import per.wilson.generator.utils.MapUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: Wilson
@@ -48,11 +48,6 @@ public class GenerateProperties {
      */
     private String deleteField = "is_delete";
     private String tablePrefix = "";
-    /**
-     * package空则不生成
-     */
-    private String voPackage = "vo";
-    private String dtoPackage = "dto";
     /**
      * 包含的单词表不生成Service、Controller
      */
@@ -98,13 +93,11 @@ public class GenerateProperties {
     }
 
     public GenerateProperties afterPropertiesSet() throws IOException {
-        if (StringUtils.isAnyEmpty(url, username, password, basePackage)) {
-            throw new RuntimeException("url,name,password,basePackage皆不能为空");
+        if (StringUtils.isAnyEmpty(url, username, password)) {
+            throw new RuntimeException("url,name,password皆不能为空");
         }
         initOutput();
         injectCfgMap = new HashMap<>(8);
-        voPackage = initPackage("vo", voPackage);
-        dtoPackage = initPackage("dto", dtoPackage);
         IfUtils.withIf(responseClass != null, injectCfgMap, e -> MapUtils.build(e)
                 .put("responseClass", responseClass.getSimpleName())
                 .put("responseClassPackage", responseClass.getCanonicalName()));
@@ -114,6 +107,10 @@ public class GenerateProperties {
         return this;
     }
 
+    /**
+     * 若目录存在则清空生成目录下的文件
+     * @throws IOException
+     */
     private void initOutput() throws IOException {
         if (cleanBeforeGenerate) {
             File file = new File(output);
@@ -121,27 +118,6 @@ public class GenerateProperties {
                 FileUtils.cleanDirectory(new File(output));
             }
         }
-    }
-
-    private String initPackage(String defaultPackage, String actualPackage) {
-        if (actualPackage == null) {
-            return null;
-        }
-        if (!actualPackage.isEmpty()) {
-            actualPackage = basePackage + "." + actualPackage;
-        } else {
-            actualPackage = defaultPackage;
-        }
-        injectCfgMap.put(defaultPackage, actualPackage);
-        return GenerateConstant.JAVA_PATH + File.separator + actualPackage;
-    }
-
-    public String getVoPath() {
-        return voPackage == null ? null : StringUtils.replaceChars(voPackage, ".", File.separator);
-    }
-
-    public String getDtoPath() {
-        return dtoPackage == null ? null : StringUtils.replaceChars(dtoPackage, ".", File.separator);
     }
 
     public String getOutput() {
@@ -208,24 +184,6 @@ public class GenerateProperties {
 
     public GenerateProperties setTablePrefix(String tablePrefix) {
         this.tablePrefix = tablePrefix;
-        return this;
-    }
-
-    public String getVoPackage() {
-        return voPackage;
-    }
-
-    public GenerateProperties setVoPackage(String voPackage) {
-        this.voPackage = voPackage;
-        return this;
-    }
-
-    public String getDtoPackage() {
-        return dtoPackage;
-    }
-
-    public GenerateProperties setDtoPackage(String dtoPackage) {
-        this.dtoPackage = dtoPackage;
         return this;
     }
 

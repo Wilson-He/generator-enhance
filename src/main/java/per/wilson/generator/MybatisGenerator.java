@@ -5,7 +5,6 @@ import per.baomidou.mybatisplus.generator.AutoGenerator;
 import per.baomidou.mybatisplus.generator.config.GlobalConfig;
 import per.baomidou.mybatisplus.generator.config.PackageConfig;
 import per.baomidou.mybatisplus.generator.config.StrategyConfig;
-import per.baomidou.mybatisplus.generator.config.TemplateConfig;
 import per.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import per.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import per.wilson.generator.constant.GenerateConstant;
@@ -25,17 +24,7 @@ import java.util.Map;
 @Getter
 public class MybatisGenerator {
     private GenerateProperties properties = new GenerateProperties();
-    private PackageConfig packageConfig = new PackageConfig().setParent(GenerateConstant.JAVA_PATH)
-            .setXml("mappers")
-            .setEntity(".entity.model")
-            .setConstant(".entity.constant")
-            .setMapper(".dao")
-            .setService(".service")
-            .setServiceImpl(".service.impl")
-            .setController(".controller")
-            .setControllerImpl(".controller.impl")
-            .setVo(".vo")
-            .setDto(".dto");
+    private PackageConfig packageGenerateConfig = new PackageConfig();
 
     private GlobalConfig globalConfig = new GlobalConfig()
             .setActiveRecord(false)
@@ -46,6 +35,7 @@ public class MybatisGenerator {
             .setFileOverride(true)
             .setDtoGetName("Get%sDTO")
             .setDtoPageName("Page%sDTO");
+
     /**
      * 数据表转实体生成策略
      */
@@ -57,8 +47,9 @@ public class MybatisGenerator {
             .setNaming(NamingStrategy.underline_to_camel);
 
     public static void main(String[] args) {
-        MybatisGenerator.build("root", "tiger", "jdbc:mysql://localhost:3306/wilson", "per.wilson.web")
-                .generate();
+        MybatisGenerator generator = MybatisGenerator.build("root", "tiger", "jdbc:mysql://localhost:3306/wilson", "per.wilson.web");
+        generator.packageGenerateConfig.setService(null);
+        generator.generate();
     }
 
     public static MybatisGenerator build(String username, String password, String url, String basePackage) {
@@ -70,8 +61,8 @@ public class MybatisGenerator {
             properties.setUsername(username)
                     .setPassword(password)
                     .setUrl(url)
-                    .setBasePackage(basePackage)
                     .afterPropertiesSet();
+            packageGenerateConfig.addPackagePrefix(basePackage);
         } catch (IOException e) {
             System.err.println("生成文件的文件目录不存在");
         }
@@ -81,18 +72,7 @@ public class MybatisGenerator {
      * @param tableNames 指定生成的表名，不传查全部
      */
     public void generate(String... tableNames) {
-        String basePackage = properties.getBasePackage();
-        packageConfig
-                .setXml(GenerateConstant.RESOURCES_PATH + File.separator + packageConfig.getXml())
-                .setEntity(basePackage + packageConfig.getEntity())
-                .setConstant(basePackage + packageConfig.getConstant())
-                .setMapper(basePackage + packageConfig.getMapper())
-                .setService(basePackage + packageConfig.getService())
-                .setServiceImpl(basePackage + packageConfig.getServiceImpl())
-                .setController(basePackage + packageConfig.getController())
-                .setControllerImpl(basePackage + packageConfig.getControllerImpl())
-                .setVo(basePackage + packageConfig.getVo())
-                .setDto(basePackage + packageConfig.getDto());
+        packageGenerateConfig.setXml(GenerateConstant.RESOURCES_PATH + File.separator + packageGenerateConfig.getXml());
         AutoGenerator generator = new AutoGenerator()
                 .setGlobalConfig(globalConfig.setOutputDir(properties.getOutput()))
                 .setDataSource(properties.getDataSourceConfig())
@@ -100,7 +80,7 @@ public class MybatisGenerator {
                 .setTemplate(properties.getTemplateConfig())
                 .setTemplateEngine(new FreemarkerTemplateEngine())
                 .setCfg(new DefaultInjectionConfigImpl(properties.getInjectCfgMap()))
-                .setPackageInfo(packageConfig);
+                .setPackageInfo(packageGenerateConfig);
         generator.execute();
     }
 

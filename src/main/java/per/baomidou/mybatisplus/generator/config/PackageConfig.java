@@ -19,6 +19,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.io.File;
+import java.util.Objects;
+
 /**
  * <p>
  * 跟包相关的配置项
@@ -34,7 +37,7 @@ public class PackageConfig {
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    private String parent = "com.baomidou";
+    private String parent = "src" + File.separator + "main" + File.separator + "java";
 
     /**
      * 父包模块名。
@@ -44,42 +47,50 @@ public class PackageConfig {
     /**
      * Entity包名
      */
-    private String entity = "entity";
+    private String entity = ".entity.model";
     /**
      * EntityConstant包名
      */
-    private String constant = "constant";
+    private String constant = ".entity.constant";
 
     /**
      * Service包名
      */
-    private String service = "service";
+    private String service = ".service";
 
     /**
      * Service Impl包名
      */
-    private String serviceImpl = "service.impl";
+    private String serviceImpl = ".service.impl";
     /**
      * Mapper包名
      */
-    private String mapper = "mapper";
+    private String mapper = ".dao";
 
     /**
      * Mapper XML包名
      */
-    private String xml = "mapper.xml";
+    private String xml = "mappers";
 
     /**
      * Controller包名
      */
-    private String controller = "web";
+    private String controller = ".controller";
 
     /**
-     * ControllerImpl包名
+     * ControllerImpl 包名
      */
-    private String controllerImpl = "controller.impl";
-    private String vo = "vo";
-    private String dto = "dto";
+    private String controllerImpl = ".controller.impl";
+
+    /**
+     * vo 包名
+     */
+    private String vo = ".vo";
+
+    /**
+     * dto 包名
+     */
+    private String dto = ".dto";
 
     public String getParent() {
         if (moduleName != null && moduleName.length() != 0) {
@@ -166,5 +177,18 @@ public class PackageConfig {
     public PackageConfig setControllerImpl(String controllerImpl) {
         this.controllerImpl = controllerImpl;
         return this;
+    }
+
+    public void addPackagePrefix(String basePackage) {
+        Objects.requireNonNull(basePackage, "basePackage must not be null");
+        entity = entity == null ? null : basePackage + entity;
+        constant = constant == null ? null : basePackage + constant;
+        mapper = mapper == null ? null : basePackage + mapper;
+        service = service == null ? null : basePackage + service;
+        serviceImpl = service == null ||  serviceImpl == null ? null : basePackage + serviceImpl;
+        controller = controller == null ? null : basePackage + controller;
+        controllerImpl = controllerImpl == null ? null : basePackage + controllerImpl;
+        dto = dto == null ? null : basePackage + dto;
+        vo = vo == null ? null : basePackage + vo;
     }
 }
