@@ -43,11 +43,15 @@ public abstract class AbstractFileOutConfig {
     /**
      * 输出文件
      *
-     * @param tableInfo
-     * @return
+     * @param tableInfo tableInfo
+     * @return tableInfo
      */
     public abstract String outputFile(TableInfo tableInfo);
 
+    /**
+     *
+     * @return templatePath
+     */
     public String getTemplatePath() {
         return templatePath;
     }

@@ -20,22 +20,17 @@ import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.annotations.Version;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import java.io.Serializable;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import per.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import per.baomidou.mybatisplus.generator.config.GlobalConfig;
-import per.baomidou.mybatisplus.generator.config.PackageConfig;
-import per.baomidou.mybatisplus.generator.config.StrategyConfig;
-import per.baomidou.mybatisplus.generator.config.TemplateConfig;
+import per.baomidou.mybatisplus.generator.config.*;
 import per.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import per.baomidou.mybatisplus.generator.config.po.TableField;
 import per.baomidou.mybatisplus.generator.config.po.TableInfo;
 import per.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import per.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 生成文件
@@ -106,7 +101,7 @@ public class AutoGenerator {
      * </p>
      *
      * @param config 配置信息
-     * @return
+     * @return TableInfoList
      */
     protected List<TableInfo> getAllTableInfoList(ConfigBuilder config) {
         return config.getTableInfoList();

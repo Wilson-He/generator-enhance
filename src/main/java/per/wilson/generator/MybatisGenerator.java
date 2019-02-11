@@ -13,6 +13,7 @@ import per.wilson.generator.extend.prop.GenerateProperties;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * MybatisGenerator
@@ -48,7 +49,6 @@ public class MybatisGenerator {
     public static void main(String[] args) {
         MybatisGenerator generator = MybatisGenerator.build("root", "tiger", "jdbc:mysql://localhost:3306/wilson", "per.wilson.web");
         generator.packageGenerateConfig.setService(null);
-//        generator.generate(clazz);
     }
 
     public static MybatisGenerator build(String username, String password, String url, String basePackage) {
@@ -68,6 +68,7 @@ public class MybatisGenerator {
     }
 
     /**
+     * @param clazz clazz
      * @param tableNames 指定生成的表名，不传查全部
      */
     public void generate(Class clazz, String... tableNames) {
@@ -86,15 +87,14 @@ public class MybatisGenerator {
     /**
      * 根据模板生成文件
      *
+     * @param clazz        clazz
      * @param objectMap    模板文件变量map
      * @param templatePath 模板文件所在位置,classpath下文件路径为/...,如resources/templates/DAO.ftl则为/templates/DAO.ftl
      * @param outputFile   输出文件位置,可通过properties.getBasePath()获取basePackage路径再进行拼接
      * @throws Exception
      */
-/*
-    public static void generateCustomTemplate(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
-        new FreemarkerTemplateEngine().writer(objectMap, templatePath, outputFile);
+    public static void generateCustomTemplate(Class clazz, Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
+        new FreemarkerTemplateEngine(clazz).writer(objectMap, templatePath, outputFile);
     }
-*/
 
 }

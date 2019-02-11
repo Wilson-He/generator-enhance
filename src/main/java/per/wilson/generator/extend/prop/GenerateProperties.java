@@ -22,10 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 文件生成配置类
+ *
  * @author: Wilson
  * @since: 2018/10/8
- * @since:
- * @description: 文件生成配置类
  */
 @Setter
 @Getter
@@ -109,6 +109,7 @@ public class GenerateProperties {
 
     /**
      * 若目录存在则清空生成目录下的文件
+     *
      * @throws IOException
      */
     private void initOutput() throws IOException {
@@ -246,7 +247,7 @@ public class GenerateProperties {
     /**
      * 数据源获取
      *
-     * @return
+     * @return DataSourceConfig
      */
     public DataSourceConfig getDataSourceConfig() {
         return new CustomDataSourceConfig(this);

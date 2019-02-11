@@ -68,9 +68,9 @@ public enum NamingStrategy {
     /**
      * 去掉指定的前缀
      *
-     * @param name
-     * @param prefix
-     * @return
+     * @param name name
+     * @param prefix prefix
+     * @return 去前缀字段字符串
      */
     public static String removePrefix(String name, String... prefix) {
         if (StringUtils.isEmpty(name)) {
@@ -91,9 +91,9 @@ public enum NamingStrategy {
     /**
      * 判断是否包含prefix
      *
-     * @param name
-     * @param prefix
-     * @return
+     * @param name name
+     * @param prefix prefix
+     * @return 是否包含prefix
      */
     public static boolean isPrefixContained(String name, String... prefix) {
         if (StringUtils.isEmpty(name)) {
@@ -110,11 +110,9 @@ public enum NamingStrategy {
     }
 
     /**
-     * 去掉下划线前缀且将后半部分转成驼峰格式
-     *
-     * @param name
-     * @param tablePrefix
-     * @return
+     * @param name name
+     * @param tablePrefix tablePrefix
+     * @return 去掉下划线前缀且将后半部分转成驼峰格式
      */
     public static String removePrefixAndCamel(String name, String[] tablePrefix) {
         return underlineToCamel(removePrefix(name, tablePrefix));

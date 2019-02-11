@@ -554,7 +554,6 @@ public class ConfigBuilder {
      *
      * @param tableInfo 表信息
      * @param strategy  命名策略
-     * @return
      */
     private TableInfo convertTableFields(TableInfo tableInfo, NamingStrategy strategy) {
         boolean haveId = false;

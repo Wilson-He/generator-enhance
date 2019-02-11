@@ -2,8 +2,7 @@ package per.wilson.generator.constant;
 
 /**
  * @author: Wilson
- * @date: 2018/10/23
- * @since:
+ * @since: 2018/10/23
  */
 public enum TemplateType {
     /**

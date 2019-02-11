@@ -5,8 +5,7 @@ import java.util.function.Function;
 
 /**
  * @author: Wilson
- * @date: 2018/10/22
- * @since:
+ * @since: 2018/10/22
  */
 public class IfUtils {
 

@@ -16,11 +16,10 @@
 package per.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import java.util.List;
-
 import per.baomidou.mybatisplus.generator.config.po.TableFill;
 import per.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+
+import java.util.List;
 
 /**
  * <p>
@@ -176,7 +175,7 @@ public class StrategyConfig {
      * </p>
      *
      * @param word 待判断字符串
-     * @return
+     * @return 是否下划线命名
      */
     public boolean isCapitalModeNaming(String word) {
         return isCapitalMode && StringUtils.isCapitalMode(word);
@@ -188,7 +187,7 @@ public class StrategyConfig {
      * </p>
      *
      * @param tableName 表名称
-     * @return
+     * @return 是否含前缀
      */
     public boolean containsTablePrefix(String tableName) {
         if (null != tableName) {
@@ -398,7 +397,7 @@ public class StrategyConfig {
      * 设置逻辑删除字段
      *
      * @param logicDeleteFieldName 数据库字段
-     * @return
+     * @return StrategyConfig
      */
     public StrategyConfig setLogicDeleteFieldName(String logicDeleteFieldName) {
         this.logicDeleteFieldName = logicDeleteFieldName;
@@ -413,7 +412,7 @@ public class StrategyConfig {
      * 设置乐观锁字段
      *
      * @param versionFieldName 数据库字段
-     * @return
+     * @return StrategyConfig
      */
     public StrategyConfig setVersionFieldName(String versionFieldName) {
         this.versionFieldName = versionFieldName;

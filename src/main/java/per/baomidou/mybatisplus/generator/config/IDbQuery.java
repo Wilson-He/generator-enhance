@@ -15,10 +15,10 @@
  */
 package per.baomidou.mybatisplus.generator.config;
 
+import per.baomidou.mybatisplus.generator.config.rules.DbType;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import per.baomidou.mybatisplus.generator.config.rules.DbType;
 
 /**
  * <p>
@@ -33,54 +33,72 @@ public interface IDbQuery {
 
     /**
      * 数据库类型
+     *
+     * @return 数据库类型
      */
     DbType dbType();
 
 
     /**
      * 表信息查询 SQL
+     *
+     * @return 表信息查询SQL
      */
     String tablesSql();
 
 
     /**
      * 表字段信息查询 SQL
+     *
+     * @return 表字段信息查询SQL
      */
     String tableFieldsSql();
 
 
     /**
      * 表名称
+     *
+     * @return 表名称
      */
     String tableName();
 
 
     /**
      * 表注释
+     *
+     * @return 表注释
      */
     String tableComment();
 
 
     /**
      * 字段名称
+     *
+     * @return 字段名称
      */
     String fieldName();
 
 
     /**
      * 字段类型
+     *
+     * @return 字段类型
      */
     String fieldType();
 
 
     /**
      * 字段注释
+     *
+     * @return 字段注释
      */
     String fieldComment();
 
 
     /**
      * 主键字段
+     *
+     * @return 主键字段
      */
     String fieldKey();
 
@@ -92,13 +110,15 @@ public interface IDbQuery {
      *
      * @param results ResultSet
      * @return 主键是否为identity
-     * @throws SQLException
+     * @throws SQLException SQLException
      */
     boolean isKeyIdentity(ResultSet results) throws SQLException;
 
 
     /**
      * 自定义字段名称
+     *
+     * @return 自定义字段名称
      */
     String[] fieldCustom();
 }

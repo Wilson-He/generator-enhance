@@ -17,16 +17,11 @@ package per.baomidou.mybatisplus.generator.config.po;
 
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import lombok.Getter;
 import lombok.Setter;
 import per.baomidou.mybatisplus.generator.config.StrategyConfig;
+
+import java.util.*;
 
 /**
  * <p>
@@ -269,6 +264,9 @@ public class TableInfo {
 
     /**
      * 逻辑删除
+     *
+     * @param logicDeletePropertyName
+     * @return 是否逻辑删除字段
      */
     public boolean isLogicDelete(String logicDeletePropertyName) {
         for (TableField tableField : fields) {
@@ -282,7 +280,7 @@ public class TableInfo {
     /**
      * 转换filed实体为xmlmapper中的basecolumn字符串信息
      *
-     * @return
+     * @return xmlmapper中的basecolumn字符串信息
      */
     public String getFieldNames() {
         if (StringUtils.isEmpty(fieldNames)) {

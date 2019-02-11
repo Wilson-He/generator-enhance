@@ -54,6 +54,9 @@ public abstract class AbstractTemplateEngine {
      * <p>
      * 模板引擎初始化
      * </p>
+     *
+     * @param configBuilder configBuilder
+     * @return AbstractTemplateEngine
      */
     public AbstractTemplateEngine init(ConfigBuilder configBuilder) {
         this.configBuilder = configBuilder;
@@ -185,6 +188,7 @@ public abstract class AbstractTemplateEngine {
      * @param objectMap    渲染对象 MAP 信息
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
+     * @throws Exception Exception
      */
     public abstract void writer(Map<String, Object> objectMap, String templatePath, String outputFile)
             throws Exception;
@@ -193,6 +197,8 @@ public abstract class AbstractTemplateEngine {
      * <p>
      * 处理输出目录
      * </p>
+     *
+     * @return AbstractTemplateEngine
      */
     public AbstractTemplateEngine mkdirs() {
         Map<String, String> pathInfo = this.getConfigBuilder().getPathInfo();
@@ -242,6 +248,7 @@ public abstract class AbstractTemplateEngine {
      * </p>
      *
      * @param tableInfo 表信息对象
+     * @return objectMap
      */
     public Map<String, Object> getObjectMap(TableInfo tableInfo) {
         Map<String, Object> objectMap = new HashMap<>();
@@ -304,6 +311,7 @@ public abstract class AbstractTemplateEngine {
      * </p>
      *
      * @param filePath 文件路径
+     * @return templateFilePath
      */
     public abstract String templateFilePath(String filePath);
 
@@ -311,7 +319,8 @@ public abstract class AbstractTemplateEngine {
     /**
      * 检测文件是否存在
      *
-     * @return 是否
+     * @param filePath 路径
+     * @return 是否存在
      */
     protected boolean isCreate(String filePath) {
         File file = new File(filePath);
@@ -335,6 +344,8 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 文件后缀
+     *
+     * @return suffixJavaOrKt
      */
     protected String suffixJavaOrKt() {
         return this.getConfigBuilder().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX

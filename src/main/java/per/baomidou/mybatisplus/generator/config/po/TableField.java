@@ -174,6 +174,8 @@ public class TableField {
 
     /**
      * 按JavaBean规则来生成get和set方法
+     *
+     * @return 字段首字母大写字符串
      */
     public String getCapitalName() {
         if (propertyName.length() <= 1) {
