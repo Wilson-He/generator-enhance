@@ -198,7 +198,7 @@ public abstract class AbstractTemplateEngine {
         Map<String, String> pathInfo = this.getConfigBuilder().getPathInfo();
         for (Map.Entry<String, String> entry : pathInfo.entrySet()) {
             File dir = new File(entry.getValue());
-            if (!dir.exists()) {
+            if (!dir.exists() && !dir.getName().endsWith("null")) {
                 boolean result = dir.mkdirs();
                 if (result) {
                     logger.debug("创建目录： [" + entry.getValue() + "]");

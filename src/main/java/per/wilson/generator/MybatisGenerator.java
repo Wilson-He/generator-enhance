@@ -13,7 +13,6 @@ import per.wilson.generator.extend.prop.GenerateProperties;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * MybatisGenerator
@@ -49,7 +48,7 @@ public class MybatisGenerator {
     public static void main(String[] args) {
         MybatisGenerator generator = MybatisGenerator.build("root", "tiger", "jdbc:mysql://localhost:3306/wilson", "per.wilson.web");
         generator.packageGenerateConfig.setService(null);
-        generator.generate();
+//        generator.generate(clazz);
     }
 
     public static MybatisGenerator build(String username, String password, String url, String basePackage) {
@@ -71,14 +70,14 @@ public class MybatisGenerator {
     /**
      * @param tableNames 指定生成的表名，不传查全部
      */
-    public void generate(String... tableNames) {
+    public void generate(Class clazz, String... tableNames) {
         packageGenerateConfig.setXml(GenerateConstant.RESOURCES_PATH + File.separator + packageGenerateConfig.getXml());
         AutoGenerator generator = new AutoGenerator()
                 .setGlobalConfig(globalConfig.setOutputDir(properties.getOutput()))
                 .setDataSource(properties.getDataSourceConfig())
                 .setStrategy(strategyConfig.setInclude(tableNames))
                 .setTemplate(properties.getTemplateConfig())
-                .setTemplateEngine(new FreemarkerTemplateEngine())
+                .setTemplateEngine(new FreemarkerTemplateEngine(clazz))
                 .setCfg(new DefaultInjectionConfigImpl(properties.getInjectCfgMap()))
                 .setPackageInfo(packageGenerateConfig);
         generator.execute();
@@ -92,8 +91,10 @@ public class MybatisGenerator {
      * @param outputFile   输出文件位置,可通过properties.getBasePath()获取basePackage路径再进行拼接
      * @throws Exception
      */
+/*
     public static void generateCustomTemplate(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
         new FreemarkerTemplateEngine().writer(objectMap, templatePath, outputFile);
     }
+*/
 
 }

@@ -15,16 +15,16 @@
  */
 package per.baomidou.mybatisplus.generator.engine;
 
+import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import per.baomidou.mybatisplus.generator.config.ConstVal;
+import per.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Map;
-
-import per.baomidou.mybatisplus.generator.config.ConstVal;
-import per.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 
 /**
  * <p>
@@ -38,10 +38,11 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
     private Configuration configuration;
 
-    public FreemarkerTemplateEngine() {
+    public FreemarkerTemplateEngine(Class clazz) {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding(ConstVal.UTF8);
         configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, "/");
+        configuration.setTemplateLoader(new ClassTemplateLoader(clazz,"/"));
     }
 
     @Override
