@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `wilson`.`user_base` (
   `password` VARCHAR(45) NULL,
   `create_time` TIMESTAMP NULL,
   `update_time` TIMESTAMP NULL,
+  `status` varchar(10) null comment '状态(ENABLE-可用,DISABLE-不可用)'
   `is_delete` CHAR(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
