@@ -8,7 +8,7 @@
     <dependency>
         <groupId>io.github.wilson-he</groupId>
         <artifactId>generator-enhance</artifactId>
-        <version>0.3.1</version>
+        <version>0.3.2</version>
      </dependency>
      
  # 快速开始
