@@ -50,7 +50,7 @@
       
        生成枚举值:YES("YES"),NO("NO");
       
-  - freemarker常量模板例子(constant.java.ftl)
+  - 默认常量模板例子(constant.java.ftl)
   
         package ${package.Constant};
         
