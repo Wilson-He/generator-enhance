@@ -52,7 +52,7 @@
       
        生成枚举值:YES("YES"),NO("NO");
       
-  - 常量模板类例子(暂只有freemarker模板constant.java.ftl)
+  - 常量模板类生成范例(暂只有freemarker模板constant.java.ftl)
   
         package io.github.test.domain.constant;
         
