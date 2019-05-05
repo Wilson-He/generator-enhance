@@ -19,6 +19,7 @@
                 // 支持yml、properties配置
                 DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
                         .execute();
+                // DefaultGeneratorConfigFactory.defaultAutoGenerator("url","username","password", Driver.class,"io.github.wilson-he");
             }
         }
    
@@ -51,41 +52,54 @@
       
        生成枚举值:YES("YES"),NO("NO");
       
-  - 默认常量模板例子(constant.java.ftl)
+  - 常量模板类例子(暂只有freemarker模板constant.java.ftl)
   
-        package ${package.Constant};
+        package io.github.test.domain.constant;
         
         import lombok.AllArgsConstructor;
         import lombok.Getter;
         
         /**
-         * ${entity}Constant
+         * UserBaseConstant
          *
-         * @author ${author}
-         * @since ${date}
+         * @author 
+         * @since 2019-05-05
          */
-        public interface ${entity}Constant {
-        <#list table.fields as field>
-            <#if field.constantField>
+        public interface UserBaseConstant {
             /**
-             * ${field.comment}
+             * 删除(0-未删除NO,1-已删除YES)
              */
             @AllArgsConstructor
             @Getter
-            enum ${field.propertyName?capFirst} {
-                <#list field.fieldEnums as fieldEnum>
+            enum IsDelete {
                 /**
-                 * ${fieldEnum.comment}
+                 * 未删除
                  */
-                    <#if fieldEnum_has_next>
-                ${fieldEnum.key}(${fieldEnum.value}),
-                    <#else >
-                ${fieldEnum.key}(${fieldEnum.value});
-                    </#if>
-                </#list>
-                private ${field.columnType.type} value;
+                NO(0),
+                /**
+                 * 已删除
+                 */
+                YES(1);
+                private Integer value;
             }
         
-            </#if>
-        </#list>
+            /**
+             * 状态(ENABLE-启用,DISABLE-禁用)
+             */
+            @AllArgsConstructor
+            @Getter
+            enum Status {
+                /**
+                 * 启用
+                 */
+                ENABLE("ENABLE"),
+                /**
+                 * 禁用
+                 */
+                DISABLE("DISABLE");
+                private String value;
+            }
+        
         }
+
+
