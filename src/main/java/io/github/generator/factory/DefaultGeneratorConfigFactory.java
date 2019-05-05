@@ -38,7 +38,7 @@ public class DefaultGeneratorConfigFactory {
                 // 策略配置项
                 .setStrategy(strategyConfig())
                 // 模板生成设置
-                .setTemplateConfig(new TemplateConfig())
+                .setTemplate(new TemplateConfig())
                 // 选择模板引擎
                 .setTemplateEngine(new FreemarkerTemplateEngine());
     }

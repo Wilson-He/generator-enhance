@@ -47,6 +47,7 @@ public class TableField {
      * 主键是否为自增类型
      */
     private boolean keyIdentityFlag;
+    private String table;
     private String name;
     private String type;
     private String propertyName;
@@ -105,8 +106,13 @@ public class TableField {
         int constantNum = varComments.size();
         fieldEnums = new ArrayList<>(constantNum);
         String clazz = columnType.getType();
-        for (int i = 0; i < constantNum; i++) {
-            fieldEnums.add(new TableFieldComment(varNames.get(i), varValues.get(i), varComments.get(i), clazz));
+        try {
+            for (int i = 0; i < constantNum; i++) {
+                fieldEnums.add(new TableFieldComment(varNames.get(i), varValues.get(i), varComments.get(i), clazz));
+            }
+        } catch (Exception e) {
+            String exception = "%s.%s常量范式错误,请检查范式: %s";
+            System.err.println(String.format(exception, table, name, fieldEnumsString));
         }
     }
 

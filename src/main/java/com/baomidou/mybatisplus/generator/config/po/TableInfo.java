@@ -117,6 +117,7 @@ public class TableInfo {
                     importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
                     importPackages.add(com.baomidou.mybatisplus.annotation.FieldFill.class.getCanonicalName());
                 }
+                field.setTable(this.name);
             }
         }
         return this;

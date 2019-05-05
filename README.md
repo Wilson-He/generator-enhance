@@ -3,12 +3,12 @@
  - 添加spring数据库配置读取
  - 添加默认配置
  - 排除含指定关键字的表Service、Controller类的生成
- 
+ - 将默认生成目录更改为当前root模块的output目录下
  # 依赖
     <dependency>
         <groupId>io.github.wilson-he</groupId>
         <artifactId>generator-enhance</artifactId>
-        <version>0.3.1.RELEASE</version>
+        <version>0.3.1</version>
      </dependency>
      
  # 快速开始
@@ -25,14 +25,17 @@
    
         DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
             .getStrategy()
+            // 设置输出目录,不设置则默认生成到项目root模块的output目录下
+            // .setOutputDir("E:\\project\\payment\\output")
             .setLogicDeleteFieldName("is_delete")
             // 不生成名称含Detail、Relation的Service、Controller
             .excludeKeywords("Detail", "Relation")
             .backGenerator()
-            .getTemplateConfig()
+            // 设置生成哪些模板
+            .getTemplate()
             // 不生成常量类
             .excludeConstant()
-            // 不生成Controller类
+            // 不生成Controller模板类
             .excludeController()
             .backGenerator()
             .execute();
@@ -47,3 +50,41 @@
       
        生成枚举值:YES("YES"),NO("NO");
       
+  - freemarker常量模板例子(constant.java.ftl)
+  
+        package ${package.Constant};
+        
+        import lombok.AllArgsConstructor;
+        import lombok.Getter;
+        
+        /**
+         * ${entity}Constant
+         *
+         * @author ${author}
+         * @since ${date}
+         */
+        public interface ${entity}Constant {
+        <#list table.fields as field>
+            <#if field.constantField>
+            /**
+             * ${field.comment}
+             */
+            @AllArgsConstructor
+            @Getter
+            enum ${field.propertyName?capFirst} {
+                <#list field.fieldEnums as fieldEnum>
+                /**
+                 * ${fieldEnum.comment}
+                 */
+                    <#if fieldEnum_has_next>
+                ${fieldEnum.key}(${fieldEnum.value}),
+                    <#else >
+                ${fieldEnum.key}(${fieldEnum.value});
+                    </#if>
+                </#list>
+                private ${field.columnType.type} value;
+            }
+        
+            </#if>
+        </#list>
+        }

@@ -196,7 +196,7 @@ public class AutoGenerator {
         return this;
     }
 
-    public AutoGenerator setTemplateConfig(TemplateConfig template) {
+    public AutoGenerator setTemplate(TemplateConfig template) {
         this.templateConfig = template.setAutoGenerator(this);
         return this;
     }
