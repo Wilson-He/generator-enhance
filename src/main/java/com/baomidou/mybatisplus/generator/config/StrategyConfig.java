@@ -120,7 +120,6 @@ public class StrategyConfig {
     /**
      * 【实体】是否为构建者模型（默认 false）<br>
      * -----------------------------------<br>
-     * public User setName(String name) { this.name = name; return this; }
      */
     private boolean entityBuilderModel = false;
     /**
@@ -168,8 +167,17 @@ public class StrategyConfig {
      * 根据关键字不生成指定关键字的Service、Controller,
      */
     private String[] excludeKeywords;
+    /**
+     * 根据关键字生成指定关键字的Service、Controller,
+     */
+    private String[] includeKeywords;
 
     private AutoGenerator autoGenerator;
+
+    public StrategyConfig includeKeywords(String... keywords) {
+        this.includeKeywords = keywords;
+        return this;
+    }
 
     public StrategyConfig excludeKeywords(String... keywords) {
         this.excludeKeywords = keywords;

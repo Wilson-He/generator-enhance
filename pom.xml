@@ -6,7 +6,7 @@
 
     <groupId>io.github.wilson-he</groupId>
     <artifactId>generator-enhance</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <packaging>jar</packaging>
 
     <name>generator-enhance</name>

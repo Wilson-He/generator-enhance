@@ -89,9 +89,13 @@ public abstract class AbstractTemplateEngine {
                 }
                 // Mp.java
                 String entityName = tableInfo.getEntityName();
+                String tableName = tableInfo.getName();
                 String[] excludeKeywords = configBuilder.getStrategyConfig().getExcludeKeywords();
+                String[] includeKeywords = configBuilder.getStrategyConfig().getIncludeKeywords();
+                final boolean isIncludeKeywords = ArrayUtils.isEmpty(includeKeywords) ||
+                        org.apache.commons.lang3.StringUtils.containsAny(tableName, includeKeywords);
                 final boolean isExcludeKeywords = ArrayUtils.isEmpty(excludeKeywords) ||
-                        !org.apache.commons.lang3.StringUtils.containsAny(entityName, excludeKeywords);
+                        !org.apache.commons.lang3.StringUtils.containsAny(tableName, excludeKeywords);
                 if (null != entityName && null != pathInfo.get(ConstVal.ENTITY_PATH)) {
                     String entityFile = String.format((pathInfo.get(ConstVal.ENTITY_PATH) + File.separator + "%s" + suffixJavaOrKt()), entityName);
                     if (isCreate(FileType.ENTITY, entityFile)) {
@@ -119,21 +123,21 @@ public abstract class AbstractTemplateEngine {
                     }
                 }
                 // IMpService.java
-                if (isExcludeKeywords && null != tableInfo.getServiceName() && null != pathInfo.get(ConstVal.SERVICE_PATH)) {
+                if (isIncludeKeywords && isExcludeKeywords && null != tableInfo.getServiceName() && null != pathInfo.get(ConstVal.SERVICE_PATH)) {
                     String serviceFile = String.format((pathInfo.get(ConstVal.SERVICE_PATH) + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
                     if (isCreate(FileType.SERVICE, serviceFile)) {
                         writer(objectMap, templateFilePath(template.getService()), serviceFile);
                     }
                 }
                 // MpServiceImpl.java
-                if (isExcludeKeywords && null != tableInfo.getServiceImplName() && null != pathInfo.get(ConstVal.SERVICE_IMPL_PATH)) {
+                if (isIncludeKeywords && isExcludeKeywords && null != tableInfo.getServiceImplName() && null != pathInfo.get(ConstVal.SERVICE_IMPL_PATH)) {
                     String implFile = String.format((pathInfo.get(ConstVal.SERVICE_IMPL_PATH) + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
                     if (isCreate(FileType.SERVICE_IMPL, implFile)) {
                         writer(objectMap, templateFilePath(template.getServiceImpl()), implFile);
                     }
                 }
                 // MpController.java
-                if (isExcludeKeywords && null != tableInfo.getControllerName() && null != pathInfo.get(ConstVal.CONTROLLER_PATH)) {
+                if (isIncludeKeywords && isExcludeKeywords && null != tableInfo.getControllerName() && null != pathInfo.get(ConstVal.CONTROLLER_PATH)) {
                     String controllerFile = String.format((pathInfo.get(ConstVal.CONTROLLER_PATH) + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
                     if (isCreate(FileType.CONTROLLER, controllerFile)) {
                         writer(objectMap, templateFilePath(template.getController()), controllerFile);

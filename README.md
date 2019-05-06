@@ -8,7 +8,7 @@
     <dependency>
         <groupId>io.github.wilson-he</groupId>
         <artifactId>generator-enhance</artifactId>
-        <version>0.3.2</version>
+        <version>LATEST</version>
      </dependency>
      
  # 快速开始
@@ -30,8 +30,10 @@
             // 设置输出目录,不设置则默认生成到项目root模块的output目录下
             // .setOutputDir("E:\\project\\payment\\output")
             .setLogicDeleteFieldName("is_delete")
-            // 不生成名称含Detail、Relation的Service、Controller
-            .excludeKeywords("Detail", "Relation")
+            // 不生成表名含detail、relation的Service、Controller
+            .excludeKeywords("detail", "relation")
+            // 只生成名表名pay、base的Service、Controller
+            .includeKeywords("pay", "base")
             .backGenerator()
             // 设置生成哪些模板
             .getTemplate()
