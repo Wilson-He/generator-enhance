@@ -14,14 +14,23 @@
  # 快速开始
   - Simple Start
   
-        public class CustomGeneratorApplication {
-            public static void main(String[] args) throws IOException {
-                // 支持yml、properties配置
-                DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
-                        .execute();
-                // DefaultGeneratorConfigFactory.defaultAutoGenerator("url","username","password", Driver.class,"io.github.wilson-he");
-            }
-        }
+         public class CustomGeneratorApplication {
+             public static void main(String[] args) throws IOException {
+                 // 支持yml、properties配置
+                 DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
+                         .execute();
+                 // DefaultGeneratorConfigFactory.defaultAutoGenerator("url","username","password", Driver.class,"io.github.wilson-he");
+             }
+         }
+    
+  - application.yml
+    
+         spring:
+           datasource:
+             username: root
+             password: tiger
+             driver-class-name: com.mysql.cj.jdbc.Driver
+             url: jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=UTF-8
    
   - 扩展配置
    
@@ -47,14 +56,50 @@
    
   - SQL常量字段注释范式(user-test.sql含DDL范式demo)
     - 删除标志量(1-已删除YES, 0-未删除NO)|删除标志量(1:已删除YES, 0:未删除NO)
-       
-       生成枚举值:YES(1),NO(0);
-   
     - 删除标志量(YES:已删除, NO:未删除, D:未删除),删除标志量(YES-已删除, NO-未删除)
       
-       生成枚举值:YES("YES"),NO("NO");
-      
-  - 常量模板类生成范例(暂只有freemarker模板constant.java.ftl)
+  - 常量模板类生成范例
+    A(default):
+       
+        public interface UserBaseConstant {
+
+           /**
+            * 删除(0-未删除NO,1-已删除YES)
+            */
+           interface IsDelete {
+               /**
+                * 未删除
+                */
+               Integer NO = 0;
+               /**
+                * 已删除
+                */
+               Integer YES = 1;
+               Map<Integer, String> MAP = ImmutableBiMap.of(
+                       0, "未删除",
+                       1, "已删除");
+           }
+
+           /**
+            * 状态(ENABLE-启用,DISABLE-禁用)
+            */
+           interface Status {
+               /**
+                * 启用
+                */
+               String ENABLE = "ENABLE";
+               /**
+                * 禁用
+                */
+               String DISABLE = "DISABLE";
+               Map<String, String> MAP = ImmutableBiMap.of(
+                       "ENABLE", "启用",
+                       "DISABLE", "禁用");
+           }
+        }
+       
+    B: getTemplateConfig().useEnumConstant()
+                .backGenerator();
   
         package io.github.test.domain.constant;
         
