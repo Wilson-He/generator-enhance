@@ -67,11 +67,11 @@ public class TableField {
     /**
      * 正则匹配常量注释,如：(1-已删除YES, 0-未删除NO),(1:已删除YES, 0:未删除NO)
      */
-    private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+)(-|:)\\W+\\w+,?\\s?)+";
+    private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+)([-:])\\W+\\w+,?\\s?)+";
     /**
      * 正则匹配常量注释,如：(YES:已删除, NO:未删除, D:未删除),(YES-已删除, NO-未删除)
      */
-    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)(-|:)(\\W+|\\w+,?\\s?)+)";
+    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)([-:])(\\W+|\\w+,?\\s?)+)";
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
     public boolean isConstantField() {
@@ -79,7 +79,7 @@ public class TableField {
             return false;
         }
         fieldEnumsString = substringBetween(comment, "(", ")");
-        if (null == fieldEnumsString || !Pattern.matches(COMMENT_REGEX, fieldEnumsString)) {
+        if (null == fieldEnumsString || !fieldEnumsString.contains(",") || !Pattern.matches(COMMENT_REGEX, fieldEnumsString)) {
             return false;
         }
         if (null == fieldEnums) {
@@ -89,14 +89,17 @@ public class TableField {
     }
 
     private void initCommentConstantList() {
-        // 范例：isDelete(YES:1-已删除,NO:0-未删除)  state(ENABLE:可用,DISABLE:不可用)
-        String filterCommentPattern = "[^\\W+]|-|\\s+";
+        // fieldEnumsString范例： YES:1-已删除,NO:0-未删除  ENABLE:可用,DISABLE:不可用 1-可用,0-不可用
+        String filterCommentPattern = "[^\\W+]|-|\\s+|:";
         String filterNamePattern = "[^a-zA-Z_]";
         String filterValuePattern = "\\D+";
+        // 获取值注释 结果如: [已删除,未删除]
         List<String> varComments = Arrays.asList(RegExUtils.removePattern(fieldEnumsString, filterCommentPattern).split(","));
+        // 获取名称列表 结果如: [YES,NO]
         List<String> varNames = Arrays.stream(fieldEnumsString.replaceAll(filterNamePattern, ",").split(","))
                 .filter(e -> e.matches("\\w+"))
                 .collect(Collectors.toList());
+        // 获取值列表 结果如: [1,0]
         List<String> varValues = Arrays.stream(fieldEnumsString.replaceAll(filterValuePattern, ",").split(","))
                 .filter(e -> e.matches("\\d+"))
                 .collect(Collectors.toList());

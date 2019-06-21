@@ -1,7 +1,9 @@
 package ${package.Controller};
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.annotations.ApiParam;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +16,7 @@ import ${superControllerClassPackage};
 
 /**
  * <p>
- * ${table.comment!} 前端控制器
+ * <#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>
  * </p>
  *
  * @author ${author}
@@ -34,6 +36,30 @@ public class ${table.controllerName} extends ${superControllerClass} {
     <#else>
 public class ${table.controllerName} {
     </#if>
+    @PostMapping("/")
+    public Object add(@Validated @RequestBody Object vo){
+        return null;
+    }
 
+    @GetMapping("/")
+    public Object get(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id){
+    return null;
+    }
+
+    @GetMapping("/page")
+    public Object page(@ApiParam(name = "page", value = "页码", defaultValue = "1") @RequestParam(defaultValue = "1") Integer page,
+    @ApiParam(name = "size", value = "每页返回数", defaultValue = "15") @RequestParam(defaultValue = "15") Integer size){
+        return null;
+    }
+
+    @PutMapping("/")
+    public Object update(@Validated @RequestBody Object vo){
+        return null;
+    }
+
+    @DeleteMapping("/")
+    public Object delete(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id){
+        return null;
+    }
 }
 </#if>

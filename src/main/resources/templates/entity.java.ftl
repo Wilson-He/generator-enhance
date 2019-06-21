@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 @TableName("${table.name}")
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}对象", description="${table.comment!}")
+@ApiModel("${table.comment!}")
 </#if>
 <#if superEntityClass??>
 public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
@@ -43,8 +43,6 @@ public class ${entity} extends Model<${entity}> {
 <#else>
 public class ${entity} implements Serializable {
 </#if>
-
-    private static final long serialVersionUID = 1L;
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
     <#if field.keyFlag>
@@ -53,7 +51,7 @@ public class ${entity} implements Serializable {
 
     <#if field.comment!?length gt 0>
         <#if swagger2>
-    @ApiModelProperty(value = "${field.comment}")
+    @ApiModelProperty("${field.comment}")
         <#else>
     /**
      * ${field.comment}

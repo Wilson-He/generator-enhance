@@ -1,6 +1,7 @@
 package ${package.Constant};
 
-import com.google.common.collect.ImmutableBiMap;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,21 +26,31 @@ public interface ${entity}Constant {
     /**
      * ${field.comment}
      */
-    interface ${field.propertyName?capFirst} {
+    @AllArgsConstructor
+    @Getter
+    enum ${field.propertyName?capFirst} {
         <#list field.fieldEnums as fieldEnum>
         /**
          * ${fieldEnum.comment}
          */
-        ${field.columnType.type} ${fieldEnum.key} = ${fieldEnum.value};
-        </#list>
-        Map<${field.columnType.type}, String> MAP = ImmutableBiMap.of(
-        <#list field.fieldEnums as fieldEnum>
             <#if fieldEnum_has_next>
-                ${fieldEnum.value}, "${fieldEnum.comment}",
+        ${fieldEnum.key}(${fieldEnum.value}, "${fieldEnum.comment}"),
             <#else >
-                ${fieldEnum.value}, "${fieldEnum.comment}");
+        ${fieldEnum.key}(${fieldEnum.value}, "${fieldEnum.comment}");
             </#if>
         </#list>
+        private ${field.columnType.type} value;
+        private String comment;
+        public static final Map<${field.columnType.type}, String> MAP = Collections.unmodifiableMap(Arrays.stream(${field.propertyName?capFirst}.values())
+            .collect(Collectors.toMap(constant -> constant.value, constant -> constant.comment)));
+
+        public static String getComment(${field.columnType.type} value) {
+            return MAP.get(value);
+        }
+
+        public boolean equalsVal(${field.columnType.type} val) {
+            return this.value.equals(val);
+        }
     }
 
     </#if>

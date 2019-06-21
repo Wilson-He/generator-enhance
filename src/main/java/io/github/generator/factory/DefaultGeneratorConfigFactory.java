@@ -24,6 +24,18 @@ public class DefaultGeneratorConfigFactory {
      * 获取默认生成器
      *
      * @param dbConfigFileName Spring数据库配置文件名,如application.yml、application.properties
+     * @param packageClass     生成文件到packageClass所在的包
+     * @return AutoGenerator
+     * @throws IOException 文件读取错误
+     */
+    public static AutoGenerator defaultAutoGenerator(String dbConfigFileName, Class<?> packageClass) throws IOException {
+        return defaultAutoGenerator(dbConfigFileName, packageClass.getPackage().getName());
+    }
+
+    /**
+     * 获取默认生成器
+     *
+     * @param dbConfigFileName Spring数据库配置文件名,如application.yml、application.properties
      * @param basePackage      java文件生成基包
      * @return AutoGenerator
      * @throws IOException 文件读取错误
@@ -38,7 +50,7 @@ public class DefaultGeneratorConfigFactory {
                 // 策略配置项
                 .setStrategy(strategyConfig())
                 // 模板生成设置
-                .setTemplate(new TemplateConfig())
+                .setTemplate(new TemplateConfig().excludeController())
                 // 选择模板引擎
                 .setTemplateEngine(new FreemarkerTemplateEngine());
     }
@@ -62,6 +74,8 @@ public class DefaultGeneratorConfigFactory {
                 .setPackageInfo(packageConfig(basePackage))
                 // 策略配置项
                 .setStrategy(strategyConfig())
+                // 模板生成设置
+                .setTemplate(new TemplateConfig())
                 // 选择模板引擎
                 .setTemplateEngine(new FreemarkerTemplateEngine());
     }
@@ -122,6 +136,7 @@ public class DefaultGeneratorConfigFactory {
         return new GlobalConfig()
                 // 设置生成文件的命名格式
                 .setServiceName("%sService")
+                .setXmlName("%sMapper")
                 // 设置生成的日期类型,默认TIME_PACK-jdk1.8的日期类型, ONLY_DATE-java.util.Date
                 .setDateType(DateType.TIME_PACK)
                 // 设置@TableId注解的type

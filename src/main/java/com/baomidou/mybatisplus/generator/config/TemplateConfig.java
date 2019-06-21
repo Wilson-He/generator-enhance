@@ -114,4 +114,13 @@ public class TemplateConfig {
     public TemplateConfig excludeController() {
         return setController(null);
     }
+
+    /**
+     * 不生成Controller
+     *
+     * @return TemplateConfig
+     */
+    public TemplateConfig useEnumConstant() {
+        return setConstant(ConstVal.TEMPLATE_ENTITY_CONSTANT_ENUM);
+    }
 }

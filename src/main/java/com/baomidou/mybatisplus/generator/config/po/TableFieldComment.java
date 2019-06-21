@@ -17,6 +17,7 @@ public class TableFieldComment {
      */
     private String key;
     private String value;
+    private String originValue;
     /**
      * 枚举注释
      */
@@ -24,6 +25,7 @@ public class TableFieldComment {
 
     public TableFieldComment(String key, String value, String comment, String clazz) {
         this.key = key;
+        this.originValue = value;
         this.value = String.class.getSimpleName().equals(clazz) ? "\"" + value + "\"" : value;
         this.comment = comment;
     }
