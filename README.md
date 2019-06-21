@@ -59,7 +59,8 @@
     - 删除标志量(YES:已删除, NO:未删除, D:未删除),删除标志量(YES-已删除, NO-未删除)
       
   - 常量模板类生成范例
-    A(default):
+    
+     A(default):
        
         public interface UserBaseConstant {
 
