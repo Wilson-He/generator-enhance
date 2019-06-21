@@ -114,6 +114,7 @@
          * @since 2019-05-05
          */
         public interface UserBaseConstant {
+
             /**
              * 删除(0-未删除NO,1-已删除YES)
              */
@@ -123,14 +124,25 @@
                 /**
                  * 未删除
                  */
-                NO(0),
+                NO(0, "未删除"),
                 /**
                  * 已删除
                  */
-                YES(1);
+                YES(1, "已删除");
                 private Integer value;
+                private String comment;
+                public static final Map<Integer, String> MAP = Collections.unmodifiableMap(Arrays.stream(IsDelete.values())
+                    .collect(Collectors.toMap(constant -> constant.value, constant -> constant.comment)));
+
+                public static String getComment(Integer value) {
+                    return MAP.get(value);
+                }
+
+                public boolean equalsVal(Integer val) {
+                    return this.value.equals(val);
+                }
             }
-        
+
             /**
              * 状态(ENABLE-启用,DISABLE-禁用)
              */
@@ -140,14 +152,25 @@
                 /**
                  * 启用
                  */
-                ENABLE("ENABLE"),
+                ENABLE("ENABLE", "启用"),
                 /**
                  * 禁用
                  */
-                DISABLE("DISABLE");
+                DISABLE("DISABLE", "禁用");
                 private String value;
+                private String comment;
+                public static final Map<String, String> MAP = Collections.unmodifiableMap(Arrays.stream(Status.values())
+                    .collect(Collectors.toMap(constant -> constant.value, constant -> constant.comment)));
+
+                public static String getComment(String value) {
+                    return MAP.get(value);
+                }
+
+                public boolean equalsVal(String val) {
+                    return this.value.equals(val);
+                }
             }
-        
+
         }
 
 
