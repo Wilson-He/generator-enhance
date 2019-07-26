@@ -39,6 +39,7 @@ public class TableInfo {
 
     private final Set<String> importPackages = new HashSet<>();
     private boolean convert;
+    private boolean hasEnums;
     private String name;
     private String comment;
     private String entityName;
@@ -158,13 +159,8 @@ public class TableInfo {
         return fieldNames;
     }
 
-    /**
-     * 检测表是否含枚举常量注释范式
-     *
-     * @return boolean
-     */
-    public boolean hasEnums() {
-        return fields.stream().anyMatch(TableField::isConstantField);
+    public boolean isHasEnums() {
+        this.hasEnums = fields.stream().anyMatch(TableField::isConstantField);
+        return hasEnums;
     }
-
 }

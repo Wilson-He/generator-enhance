@@ -20,16 +20,16 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * 表字段信息
@@ -65,21 +65,25 @@ public class TableField {
     private Map<String, Object> customMap;
 
     /**
-     * 正则匹配常量注释,如：(1-已删除YES, 0-未删除NO),(1:已删除YES, 0:未删除NO)
+     * 正则匹配常量注释范式: ({db_val}:val_comment-map.key), 例：(1:已删除-YES, 0:未删除-NO)
      */
-    private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+)([-:])\\W+\\w+,?\\s?)+";
+    private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+):\\W+-[a-zA-Z]+,?)+";
     /**
-     * 正则匹配常量注释,如：(YES:已删除, NO:未删除, D:未删除),(YES-已删除, NO-未删除)
+     * 正则匹配常量注释范式: ({db_val}:val_comment), 例：(YES:已删除, NO:未删除)
      */
-    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)([-:])(\\W+|\\w+,?\\s?)+)";
+    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+):(\\W+|\\w+,?)+)";
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
     public boolean isConstantField() {
         if (null == comment) {
             return false;
         }
-        fieldEnumsString = substringBetween(comment, "(", ")");
-        if (null == fieldEnumsString || !fieldEnumsString.contains(",") || !Pattern.matches(COMMENT_REGEX, fieldEnumsString)) {
+        fieldEnumsString = org.apache.commons.lang3.StringUtils.substringBetween(comment, "(", ")");
+        if (null == fieldEnumsString) {
+            return false;
+        }
+        fieldEnumsString = fieldEnumsString.replaceAll("\\s", "");
+        if (!Pattern.matches(COMMENT_REGEX, fieldEnumsString)) {
             return false;
         }
         if (null == fieldEnums) {
@@ -89,29 +93,35 @@ public class TableField {
     }
 
     private void initCommentConstantList() {
-        // fieldEnumsString范例： YES:1-已删除,NO:0-未删除  ENABLE:可用,DISABLE:不可用 1-可用,0-不可用
-        String filterCommentPattern = "[^\\W+]|-|\\s+|:";
-        String filterNamePattern = "[^a-zA-Z_]";
-        String filterValuePattern = "\\D+";
-        // 获取值注释 结果如: [已删除,未删除]
-        List<String> varComments = Arrays.asList(RegExUtils.removePattern(fieldEnumsString, filterCommentPattern).split(","));
-        // 获取名称列表 结果如: [YES,NO]
-        List<String> varNames = Arrays.stream(fieldEnumsString.replaceAll(filterNamePattern, ",").split(","))
-                .filter(e -> e.matches("\\w+"))
-                .collect(Collectors.toList());
-        // 获取值列表 结果如: [1,0]
-        List<String> varValues = Arrays.stream(fieldEnumsString.replaceAll(filterValuePattern, ",").split(","))
-                .filter(e -> e.matches("\\d+"))
-                .collect(Collectors.toList());
+        // fieldEnumsString范例： YES:已删除,NO:未删除,D:未删除    1:已删除-YES, 0:未删除-NO
+        // 值注释列表,如: [已删除,未删除]
+        List<String> varComments;
+        // map.key列表,如: [YES,NO]
+        List<String> varKeys;
+        // map.val列表,如[YES.NO]
+        List<String> varValues;
+        if (Pattern.matches(COMMENT_REGEX_SUFFIX, fieldEnumsString)) {
+            varComments = Lists.newArrayList(substringsBetween(fieldEnumsString, ":", "-"));
+            varKeys = Lists.newArrayList(fieldEnumsString.substring(fieldEnumsString.lastIndexOf('-') + 1));
+            Collections.addAll(varKeys, substringsBetween(fieldEnumsString, "-", ","));
+            varValues = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf(':')));
+            Collections.addAll(varValues, substringsBetween(comment, ",", ":"));
+        } else {
+            varComments = Lists.newArrayList(substringsBetween(fieldEnumsString, ":", ","));
+            varComments.add(fieldEnumsString.substring(fieldEnumsString.lastIndexOf(':') + 1));
+            varKeys = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf(':')));
+            Collections.addAll(varKeys, substringsBetween(fieldEnumsString, ",", ":"));
+            varValues = varKeys;
+        }
         if (varValues.isEmpty()) {
-            varValues = varNames;
+            varValues = varKeys;
         }
         int constantNum = varComments.size();
         fieldEnums = new ArrayList<>(constantNum);
         String clazz = columnType.getType();
         try {
             for (int i = 0; i < constantNum; i++) {
-                fieldEnums.add(new TableFieldComment(varNames.get(i), varValues.get(i), varComments.get(i), clazz));
+                fieldEnums.add(new TableFieldComment(varKeys.get(i), varValues.get(i), varComments.get(i), clazz));
             }
         } catch (Exception e) {
             String exception = "%s.%s常量范式错误,请检查范式: %s";
@@ -180,18 +190,36 @@ public class TableField {
         return firstChar.toUpperCase() + setGetName.substring(1);
     }
 
-    private static String substringBetween(final String str, final String open, final String close) {
-        final int INDEX_NOT_FOUND = -1;
-        if (str == null || open == null || close == null) {
+    private static String[] substringsBetween(String str, String open, String close) {
+        if (str != null && !StringUtils.isEmpty(open) && !StringUtils.isEmpty(close)) {
+            int strLen = str.length();
+            if (strLen == 0) {
+                return ArrayUtils.EMPTY_STRING_ARRAY;
+            } else {
+                int closeLen = close.length();
+                int openLen = open.length();
+                List<String> list = new ArrayList();
+
+                int end;
+                for (int pos = 0; pos < strLen - closeLen; pos = end + closeLen) {
+                    int start = str.indexOf(open, pos);
+                    if (start < 0) {
+                        break;
+                    }
+
+                    start += openLen;
+                    end = str.indexOf(close, start);
+                    if (end < 0) {
+                        break;
+                    }
+
+                    list.add(str.substring(start, end));
+                }
+
+                return list.isEmpty() ? null : (String[]) list.toArray(new String[list.size()]);
+            }
+        } else {
             return null;
         }
-        final int start = str.indexOf(open);
-        if (start != INDEX_NOT_FOUND) {
-            final int end = str.indexOf(close, start + open.length());
-            if (end != INDEX_NOT_FOUND) {
-                return str.substring(start + open.length(), end);
-            }
-        }
-        return null;
     }
 }

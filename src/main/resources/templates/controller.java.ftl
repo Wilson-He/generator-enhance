@@ -6,39 +6,39 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 <#if restControllerStyle>
-import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.bind.annotation.RestController;
 <#else>
-import org.springframework.stereotype.Controller;
+    import org.springframework.stereotype.Controller;
 </#if>
 <#if superControllerClassPackage??>
-import ${superControllerClassPackage};
+    import ${superControllerClassPackage};
 </#if>
 
 /**
- * <p>
- * <#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>
- * </p>
- *
- * @author ${author}
- * @since ${date}
- */
+* <p>
+    * <#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>
+    * </p>
+*
+* @author ${author}
+* @since ${date}
+*/
 <#if restControllerStyle>
-@RestController
+    @RestController
 <#else>
-@Controller
+    @Controller
 </#if>
 @RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
 <#if kotlin>
-class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
+    class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
     <#if superControllerClass??>
-public class ${table.controllerName} extends ${superControllerClass} {
+        public class ${table.controllerName} extends ${superControllerClass} {
     <#else>
-public class ${table.controllerName} {
+        public class ${table.controllerName} {
     </#if>
     @PostMapping("/")
     public Object add(@Validated @RequestBody Object vo){
-        return null;
+    return null;
     }
 
     @GetMapping("/")
@@ -49,17 +49,17 @@ public class ${table.controllerName} {
     @GetMapping("/page")
     public Object page(@ApiParam(name = "page", value = "页码", defaultValue = "1") @RequestParam(defaultValue = "1") Integer page,
     @ApiParam(name = "size", value = "每页返回数", defaultValue = "15") @RequestParam(defaultValue = "15") Integer size){
-        return null;
+    return null;
     }
 
     @PutMapping("/")
     public Object update(@Validated @RequestBody Object vo){
-        return null;
+    return null;
     }
 
     @DeleteMapping("/")
     public Object delete(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id){
-        return null;
+    return null;
     }
-}
+    }
 </#if>

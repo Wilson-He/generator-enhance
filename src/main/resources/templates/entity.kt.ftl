@@ -1,32 +1,32 @@
 package ${package.Entity}
 
 <#list table.importPackages as pkg>
-import ${pkg}
+    import ${pkg}
 </#list>
 <#if swagger2>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+    import io.swagger.annotations.ApiModel;
+    import io.swagger.annotations.ApiModelProperty;
 </#if>
 /**
- * <p>
+* <p>
     * ${table.comment}
     * </p>
- *
- * @author ${author}
- * @since ${date}
- */
+*
+* @author ${author}
+* @since ${date}
+*/
 <#if table.convert>
-@TableName("${table.name}")
+    @TableName("${table.name}")
 </#if>
 <#if swagger2>
     @ApiModel(value="${entity}对象", description="${table.comment!}")
 </#if>
 <#if superEntityClass??>
-class ${entity} : ${superEntityClass}<#if activeRecord><${entity}></#if> {
+    class ${entity} : ${superEntityClass}<#if activeRecord><${entity}></#if> {
 <#elseif activeRecord>
-class ${entity} : Model<${entity}>() {
+    class ${entity} : Model<${entity}>() {
 <#else>
-class ${entity} : Serializable {
+    class ${entity} : Serializable {
 </#if>
 
 <#-- ----------  BEGIN 字段循环遍历  ---------->
@@ -37,45 +37,45 @@ class ${entity} : Serializable {
 
     <#if field.comment!?length gt 0>
         <#if swagger2>
-        @ApiModelProperty(value = "${field.comment}")
+            @ApiModelProperty(value = "${field.comment}")
         <#else>
-    /**
-     * ${field.comment}
-     */
+            /**
+            * ${field.comment}
+            */
         </#if>
     </#if>
     <#if field.keyFlag>
     <#-- 主键 -->
         <#if field.keyIdentityFlag>
-    @TableId(value = "${field.name}", type = IdType.AUTO)
+            @TableId(value = "${field.name}", type = IdType.AUTO)
         <#elseif idType ??>
-    @TableId(value = "${field.name}", type = IdType.${idType})
+            @TableId(value = "${field.name}", type = IdType.${idType})
         <#elseif field.convert>
-    @TableId("${field.name}")
+            @TableId("${field.name}")
         </#if>
     <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
+            @TableField(value = "${field.name}", fill = FieldFill.${field.fill})
         <#else>
-    @TableField(fill = FieldFill.${field.fill})
+            @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-    @TableField("${field.name}")
+        @TableField("${field.name}")
     </#if>
 <#-- 乐观锁注解 -->
     <#if (versionFieldName!"") == field.name>
-    @Version
+        @Version
     </#if>
 <#-- 逻辑删除注解 -->
     <#if (logicDeleteFieldName!"") == field.name>
-    @TableLogic
+        @TableLogic
     </#if>
     <#if field.propertyType == "Integer">
-    var ${field.propertyName}: Int? = null
+        var ${field.propertyName}: Int? = null
     <#else>
-    var ${field.propertyName}: ${field.propertyType}? = null
+        var ${field.propertyName}: ${field.propertyType}? = null
     </#if>
 </#list>
 <#-- ----------  END 字段循环遍历  ---------->
@@ -101,8 +101,8 @@ class ${entity} : Serializable {
     }
 
 </#if>
-    override fun toString(): String {
-        return "${entity}{" +
+override fun toString(): String {
+return "${entity}{" +
 <#list table.fields as field>
     <#if field_index==0>
         "${field.propertyName}=" + ${field.propertyName} +
@@ -110,6 +110,6 @@ class ${entity} : Serializable {
         ", ${field.propertyName}=" + ${field.propertyName} +
     </#if>
 </#list>
-        "}"
-    }
+"}"
+}
 }

@@ -105,7 +105,7 @@ public abstract class AbstractTemplateEngine {
                         writer(objectMap, templateFilePath(template.getEntity(getConfigBuilder().getGlobalConfig().isKotlin())), entityFile);
                     }
                 }
-                if (tableInfo.hasEnums() && null != pathInfo.get(ConstVal.CONSTANT_PATH)) {
+                if (tableInfo.isHasEnums() && null != pathInfo.get(ConstVal.CONSTANT_PATH)) {
                     String constantFile = String.format((pathInfo.get(ConstVal.CONSTANT_PATH) + File.separator + tableInfo.getConstantName() + suffixJavaOrKt()), entityName);
                     if (isCreate(FileType.CONSTANT, constantFile)) {
                         writer(objectMap, templateFilePath(template.getConstant()), constantFile);

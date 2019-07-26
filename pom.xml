@@ -6,7 +6,7 @@
 
     <groupId>io.github.wilson-he</groupId>
     <artifactId>generator-enhance</artifactId>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <packaging>jar</packaging>
 
     <name>generator-enhance</name>
@@ -15,7 +15,7 @@
     <scm>
         <connection>git@github.com:Wilson-He/generator-enhance.git</connection>
         <url>https://github.com/Wilson-He/generator-enhance</url>
-        <tag>generator-enhance-0.3.5</tag>
+        <tag>generator-enhance-0.3.6</tag>
     </scm>
     <licenses>
         <license>
@@ -79,6 +79,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.0.3.RELEASE</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.1-jre</version>
         </dependency>
     </dependencies>
     <distributionManagement>

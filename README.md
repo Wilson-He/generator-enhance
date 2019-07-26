@@ -46,60 +46,65 @@
         }
    
   - SQL常量字段注释范式(user-test.sql含DDL范式demo)
-    - 删除标志量(1-已删除YES, 0-未删除NO)|删除标志量(1:已删除YES, 0:未删除NO)
-       
-       生成枚举值:YES(1),NO(0);
-   
-    - 删除标志量(YES:已删除, NO:未删除, D:未删除),删除标志量(YES-已删除, NO-未删除)
+    - comment({db_val}:{val_comment}-{map.key}), 例：删除标志量(1:已删除-YES, 0:未删除-NO)
+    - comment({db_val}:{val_comment}), 例：删除标志量(YES:已删除, NO:未删除)
       
-       生成枚举值:YES("YES"),NO("NO");
-      
-  - 常量模板类生成范例(暂只有freemarker模板constant.java.ftl)
-  
-        package io.github.test.domain.constant;
-        
-        import lombok.AllArgsConstructor;
-        import lombok.Getter;
-        
-        /**
-         * UserBaseConstant
-         *
-         * @author 
-         * @since 2019-05-05
-         */
+  - 常量模板类生成范例
+
         public interface UserBaseConstant {
+        
             /**
-             * 删除(0-未删除NO,1-已删除YES)
+             * 删除(0:未删除-YES,1:已删除-NO)
              */
-            @AllArgsConstructor
-            @Getter
-            enum IsDelete {
+            interface IsDelete {
                 /**
                  * 未删除
                  */
-                NO(0),
+                Integer NO = 0;
                 /**
                  * 已删除
                  */
-                YES(1);
-                private Integer value;
+                Integer YES = 1;
+                Map<Integer, String> MAP = ImmutableMap.of(
+                        NO, "未删除",
+                        YES, "已删除");
             }
         
             /**
-             * 状态(ENABLE-启用,DISABLE-禁用)
+             * 状态(ENABLE:启用,DISABLE:禁用,AAA:ASEDSA用,BBB:FDADSA用,CCC:BV用AS,DDD:E用WQS)
              */
-            @AllArgsConstructor
-            @Getter
-            enum Status {
+            interface Status {
                 /**
                  * 启用
                  */
-                ENABLE("ENABLE"),
+                String ENABLE = "ENABLE";
                 /**
                  * 禁用
                  */
-                DISABLE("DISABLE");
-                private String value;
+                String DISABLE = "DISABLE";
+                /**
+                 * ASEDSA用
+                 */
+                String AAA = "AAA";
+                /**
+                 * FDADSA用
+                 */
+                String BBB = "BBB";
+                /**
+                 * BV用AS
+                 */
+                String CCC = "CCC";
+                /**
+                 * E用WQS
+                 */
+                String DDD = "DDD";
+                Map<Object, Object> MAP = ImmutableMap.builder()
+                        .put(ENABLE, "启用")
+                        .put(DISABLE, "禁用")
+                        .put(AAA, "ASEDSA用")
+                        .put(BBB, "FDADSA用")
+                        .put(CCC, "BV用AS")
+                        .build();
             }
         
         }
