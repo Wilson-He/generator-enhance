@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 ;
 #foreach($pkg in ${table.importPackages})
     ${pkg}
-;
+        ;
 #end
 #if(${swagger2})
 #end
