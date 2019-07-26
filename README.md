@@ -14,14 +14,23 @@
  # 快速开始
   - Simple Start
   
-        public class CustomGeneratorApplication {
-            public static void main(String[] args) throws IOException {
-                // 支持yml、properties配置
-                DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
-                        .execute();
-                // DefaultGeneratorConfigFactory.defaultAutoGenerator("url","username","password", Driver.class,"io.github.wilson-he");
-            }
-        }
+         public class CustomGeneratorApplication {
+             public static void main(String[] args) throws IOException {
+                 // 支持yml、properties配置
+                 DefaultGeneratorConfigFactory.defaultAutoGenerator("application.yml", "io.github.test")
+                         .execute();
+                 // DefaultGeneratorConfigFactory.defaultAutoGenerator("url","username","password", Driver.class,"io.github.wilson-he");
+             }
+         }
+    
+  - application.yml
+    
+         spring:
+           datasource:
+             username: root
+             password: tiger
+             driver-class-name: com.mysql.cj.jdbc.Driver
+             url: jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=UTF-8
    
   - 扩展配置
    
@@ -48,65 +57,44 @@
   - SQL常量字段注释范式(user-test.sql含DDL范式demo)
     - comment({db_val}:{val_comment}-{map.key}), 例：删除标志量(1:已删除-YES, 0:未删除-NO)
     - comment({db_val}:{val_comment}), 例：删除标志量(YES:已删除, NO:未删除)
-      
+        
   - 常量模板类生成范例
-
+    
         public interface UserBaseConstant {
-        
-            /**
-             * 删除(0:未删除-YES,1:已删除-NO)
-             */
-            interface IsDelete {
-                /**
-                 * 未删除
-                 */
-                Integer NO = 0;
-                /**
-                 * 已删除
-                 */
-                Integer YES = 1;
-                Map<Integer, String> MAP = ImmutableMap.of(
-                        NO, "未删除",
-                        YES, "已删除");
-            }
-        
-            /**
-             * 状态(ENABLE:启用,DISABLE:禁用,AAA:ASEDSA用,BBB:FDADSA用,CCC:BV用AS,DDD:E用WQS)
-             */
-            interface Status {
-                /**
-                 * 启用
-                 */
-                String ENABLE = "ENABLE";
-                /**
-                 * 禁用
-                 */
-                String DISABLE = "DISABLE";
-                /**
-                 * ASEDSA用
-                 */
-                String AAA = "AAA";
-                /**
-                 * FDADSA用
-                 */
-                String BBB = "BBB";
-                /**
-                 * BV用AS
-                 */
-                String CCC = "CCC";
-                /**
-                 * E用WQS
-                 */
-                String DDD = "DDD";
-                Map<Object, Object> MAP = ImmutableMap.builder()
-                        .put(ENABLE, "启用")
-                        .put(DISABLE, "禁用")
-                        .put(AAA, "ASEDSA用")
-                        .put(BBB, "FDADSA用")
-                        .put(CCC, "BV用AS")
-                        .build();
-            }
-        
+
+           /**
+            * 删除(0-未删除NO,1-已删除YES)
+            */
+           interface IsDelete {
+               /**
+                * 未删除
+                */
+               Integer NO = 0;
+               /**
+                * 已删除
+                */
+               Integer YES = 1;
+               Map<Integer, String> MAP = ImmutableBiMap.of(
+                       0, "未删除",
+                       1, "已删除");
+           }
+
+           /**
+            * 状态(ENABLE-启用,DISABLE-禁用)
+            */
+           interface Status {
+               /**
+                * 启用
+                */
+               String ENABLE = "ENABLE";
+               /**
+                * 禁用
+                */
+               String DISABLE = "DISABLE";
+               Map<String, String> MAP = ImmutableBiMap.of(
+                       "ENABLE", "启用",
+                       "DISABLE", "禁用");
+           }
         }
-
-
+       
+   - [各版本更新内容](https://github.com/Wilson-He/generator-enhance/blob/master/版本更新信息.md)
